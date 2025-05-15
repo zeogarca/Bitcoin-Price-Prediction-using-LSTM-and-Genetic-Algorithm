@@ -42,10 +42,11 @@ Este proyecto implementa un modelo de predicción de precios de Bitcoin utilizan
 
 ---
 
-## 🚀 Uso
+## 📊 Resultados
+- El algoritmo genético encuentra la combinación óptima de hiperparámetros que minimiza la pérdida en el conjunto de validación.
+- El modelo LSTM entrenado con estos parámetros mejora la capacidad de predecir precios futuros de Bitcoin con mayor precisión.
 
-### 1. Preparación del entorno
-Instala las dependencias:
-
-```bash
-pip install pandas numpy torch scikit-learn matplotlib
+## 🌱 Mejoras Futuras
+- Incluir más características como volumen, medias móviles o indicadores técnicos.
+- Implementar early stopping para evitar sobreentrenamiento.
+- Usar más generaciones y población en el algoritmo genético para una mejor optimización.
