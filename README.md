@@ -71,9 +71,6 @@ pandas, numpy: Para manipulación de datos.
 
 ## 3.2. 📥 Carga y procesamiento de datos
 
-df = pd.read_csv("/content/btcusd_1-min_data.csv")
-df['Date'] = pd.to_datetime(df['Timestamp'], unit='s')
-df = df.set_index('Date')[['Close']].copy()
 Se cargan los precios de cierre de Bitcoin por minuto.
 
 Se transforma la columna de tiempo UNIX a formato de fecha legible.
@@ -82,38 +79,18 @@ Se toma solamente el precio de cierre para la predicción.
 
 ## 3.3. 🔃 Normalización de datos
 
-scaler = MinMaxScaler()
-scaled_close = scaler.fit_transform(df[['Close']].values).flatten()
-Los precios se escalan entre 0 y 1 para que el entrenamiento sea más estable.
-
 ## 3.4. 🧩 Generación de secuencias
 
-def create_sequences(data, seq_len):
-    ...
 Se generan pares de entradas/salidas:
 
 X: ventana de seq_len precios pasados.
 
 y: el siguiente valor de la serie.
 
-Este paso convierte la serie temporal en una forma supervisada, adecuada para modelos de aprendizaje automático.
-
 ## 🧠 4. Modelo: BitcoinLSTM
-
-class BitcoinLSTM(nn.Module):
-    ...
-Es una red LSTM con:
-
-Una o más capas.
-
-Dropout para evitar overfitting.
-
-Capa final Linear para producir un único valor (predicción del siguiente precio).
 
 ## 🧪 5. Optuna: Optimización de Hiperparámetros
 
-def objective(trial):
-    ...
 Se define la función objetivo para que Optuna explore automáticamente combinaciones de:
 
 seq_len: longitud de la ventana temporal.
@@ -130,11 +107,9 @@ batch_size: tamaño de lote.
 
 El modelo es entrenado por 20 épocas y evaluado por su error cuadrático medio (MSE) en validación.
 
-🔍 Nota importante: en este código, aunque Optuna está definido, la optimización está comentada y se utilizan valores ya seleccionados previamente.
-
 ## 🎯 6. Entrenamiento final con los mejores parámetros
 
- Entrenamiento de modelo final
+Entrenamiento de modelo final
 Se utilizan los mejores hiperparámetros encontrados (ya definidos manualmente).
 
 Se divide el dataset en train/val/test (70%-15%-15%).
@@ -144,24 +119,6 @@ Aquí se busca que el modelo aprenda las regularidades temporales del precio de 
 ## 📈 7. Evaluación y visualización
 ## 7.1. Evaluación en el conjunto de prueba
 Se utiliza RMSE para evaluar precisión:
-
-rmse = np.sqrt(mean_squared_error(actual, predicted))
-## 7.2. Visualización de resultados
-Comparación visual entre precios reales y predichos.
-
-Diagrama de dispersión (Real vs Predicción).
-
-Evolución del error absoluto en el tiempo.
-
-Histograma del error.
-
-Estas gráficas ayudan a identificar:
-
-Desviaciones sistemáticas.
-
-Puntos anómalos.
-
-Calidad general de la predicción en términos temporales.
 
 ## 📊 8. Métricas Finales
 Se reportan tres métricas comunes en regresión:
@@ -174,26 +131,3 @@ MAE: Error absoluto medio.
 RMSE: Raíz del error cuadrático medio.
 
 R²: Cuánto del comportamiento del precio real es explicado por el modelo.
-
-💡 Un R² cercano a 1 implica una excelente capacidad de predicción.
-
-## ⏱️ Importancia del Enfoque Temporal
-Este proyecto es una tarea clásica de series temporales, y su importancia radica en:
-
-Capturar la dependencia secuencial entre precios pasados y futuros.
-
-Respetar la naturaleza cronológica de los datos (no se mezclan tiempos arbitrarios).
-
-Usar técnicas específicas (como LSTM y sliding windows) que modelan la memoria temporal.
-
-## ✅ Conclusiones
-El código implementa correctamente un pipeline completo para modelar una serie temporal financiera.
-
-LSTM es adecuada para esta tarea por su habilidad de capturar patrones a largo plazo.
-
-Optuna permite encontrar configuraciones óptimas sin intervención manual.
-
-Las visualizaciones proporcionan claridad sobre el desempeño temporal del modelo.
-
-El modelo final logra un alto poder predictivo en los datos de prueba.
-
